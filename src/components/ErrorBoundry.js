@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+//ErrorBoundry wraps around CardList.js ( in App.js). When list cannot be diasplayed prints out error msg
 class ErrorBoundry extends Component {
     constructor(props) {
         super(props);

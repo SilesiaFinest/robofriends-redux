@@ -1,6 +1,8 @@
 import React from 'react';
 import Card from './Card';
-
+//CardList maps over robots list passed from the App.js as props, and passes {name,email,id} to Card.js
+// when added SearchBox const filteredRobots is being passed to filter. ALWAYS ADD KEY!
+// Single card designed in Card.js
 const CardList = ({ robots }) => {
     return (
         <div>
