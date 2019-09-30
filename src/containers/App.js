@@ -30,7 +30,7 @@ class App extends Component {
             return robot.name.toLowerCase().includes(searchfield.toLowerCase());
         })
 // if robots.lenght=0 show Loading. Classes by tachyons. Searchbox prop value is passed
-// CardList receives filteredRobots list as prop
+// CardList receives filteredRobots list as prop, wrapped in error boundry
         return !robots.length ?
             <h1>Loading</h1> :
             (
