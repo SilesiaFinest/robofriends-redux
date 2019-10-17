@@ -5,48 +5,47 @@ import SearchBox from '../components/SearchBox';
 import Scroll from '../components/Scroll';
 import ErrorBoundry from '../components/ErrorBoundry';
 import './App.css';
-// import action for redux
-import { setSearchField } from '../actions';
+// import actions for redux
+import { setSearchField, requestRobots } from '../actions';
 
 //define functions to be used by connect(), this is default syntax to be used in future!
+    //here goes the state assignment from reducers (point to state.reducer.stateKey)
 const mapStateToProps = state => {
     return {
-        searchField: state.searchField
+        searchField: state.searchRobots.searchField,
+        robots: state.requestRobots.robots,
+        isPending: state.requestRobots.isPending,
+        error: state.requestRobots.error
     }
 }
+    //here are the actions! dispatch(1st) or return the function(2nd) with dispatch method
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSearchChange: (event) => dispatch(setSearchField(event.target.value))
+        onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
+        onRequestRobots: () => dispatch(requestRobots())
     }
 }
 
-//state declaration, searchfield already deleted
+// after class declaration there's no longer need for constructor and super
+// there's no state declaration here now! robots and searchfield are passed as props now
 class App extends Component {
-    constructor() {
-        super()
-        this.state = {
-            robots: []
-        }
-    }
-//use DiDMount to fetch users data from web and pass it to the robots > then to filter and CardList
+
+// no longer needs to fetch data, now can call action from this.props
     componentDidMount() {
-        fetch('https://jsonplaceholder.typicode.com/users')
-            .then(response => response.json())
-            .then(users => this.setState({ robots: users}));
+        this.props.onRequestRobots();
     }
 // onSearchChange method deleted as it's done by connect() functions
 
 //render, deconstruction, then create filteredRobots from searchfield input
-// searchField and onSearchChange passed to props by mapStateToProps
+// searchField, onSearchChange and robots are now passed as props by mapStateToProps
     render () {
-        const { robots } = this.state;
-        const { searchField, onSearchChange } = this.props;
+        const { searchField, onSearchChange, robots, isPending } = this.props;
         const filteredRobots = robots.filter(robot => {
             return robot.name.toLowerCase().includes(searchField.toLowerCase());
         })
-// if robots.lenght=0 show Loading. Classes by tachyons. Searchbox prop value is passed
+// if isPending === true show Loading. Classes by tachyons. Searchbox prop value is passed
 // CardList receives filteredRobots list as prop, wrapped in error boundry
-        return !robots.length ?
+        return isPending ?
             <h1>Loading</h1> :
             (
                 <div className='tc'>
