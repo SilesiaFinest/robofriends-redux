@@ -1,3 +1,4 @@
+import { apiCall } from './api/api';
 import {
     CHANGE_SEARCH_FIELD,
     REQUEST_ROBOTS_PENDING,
@@ -12,10 +13,10 @@ export const setSearchField = (text) => ({
 
 //create requestRobots as a Higher Order Function to return a function
 // and provide the 'second layer' with dispatch && important = to be 'caught' by react-thunk
+// added external apiCall function to shorten the code
 export const requestRobots = () => (dispatch) => {
     dispatch({ type: REQUEST_ROBOTS_PENDING });
-    fetch('https://jsonplaceholder.typicode.com/users')
-        .then(response => response.json())
+    apiCall('https://jsonplaceholder.typicode.com/users')
         .then(data => dispatch({ type: REQUEST_ROBOTS_SUCCESS, payload: data }))
         .catch(error => dispatch({ type: REQUEST_ROBOTS_FAILED, payload: error }))
 }
